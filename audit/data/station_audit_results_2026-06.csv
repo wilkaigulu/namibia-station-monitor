@@ -1,0 +1,12 @@
+station_key,name,ghcnd_id,record_start,record_end,record_years,total_records,completeness,normal_coverage,length_score,dqs,usable,notes
+windhoek_main,Windhoek (GSN),WA007401540,1970.0,2024.0,55,19793,0.9853,1.0,0.9821,0.987,True,
+windhoek_a,Windhoek (alt A),WA007400630,1972.0,1986.0,15,5084,0.9656,0.2,0.2679,0.5334,False,
+windhoek_b,Windhoek (alt B),WA007401240,1971.0,1986.0,16,5539,0.9838,0.2,0.2857,0.5478,False,
+windhoek_c,Windhoek (alt C),WA007401850,1972.0,1986.0,15,5175,0.9829,0.2,0.2679,0.5403,False,
+gobabis,Gobabis,WA007878380,1970.0,2024.0,55,12242,0.6094,0.8667,0.9821,0.8099,True,
+keetmanshoop,Keetmanshoop,WA004192150,1971.0,1986.0,16,5236,0.93,0.2,0.2857,0.5263,False,
+mariental,Mariental,WA005688170,1970.0,1986.0,17,5769,0.9673,0.2,0.3036,0.5484,False,
+rundu,Rundu,WA012084750,1970.0,2024.0,55,17121,0.8523,1.0,0.9821,0.9338,True,
+ondangwa,Ondangwa,WAM00068006,1973.0,2024.0,52,6642,0.3504,0.3667,0.9286,0.5849,False,
+walvis_bay,Walvis Bay,WAM00068098,1990.0,2024.0,35,7429,0.5831,0.3667,0.625,0.5566,False,
+luderitz,Lüderitz,NOT IN GHCND,,,0,0,0.0,,,0.0,False,Absent from GHCND entirely. WMO OSCAR lists station as active.
