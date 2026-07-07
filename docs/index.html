@@ -284,7 +284,7 @@ footer a { color: inherit; text-underline-offset: 3px; }
    The workflow commits dqs_latest.csv to monitor/data/ each month.
    We fetch it relative to this page's location.
    ============================================================ */
-const CSV_URL = "../monitor/data/dqs_latest.csv";
+const CSV_URL = "https://raw.githubusercontent.com/wilkaigulu/namibia-station-monitor/main/monitor/data/dqs_latest.csv";
 
 /* ── tiny CSV parser ── */
 function parseCSV(text) {
