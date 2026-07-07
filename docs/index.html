@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Namibia Station Monitor — live data quality feed</title>
+<meta name="description" content="A living data-quality feed for Namibia's weather station network. DQS v1.0 recomputed monthly from NOAA ISD records. By Wilka Igulu.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@300;400;500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:       #F7F5F0;
+  --bg2:      #FFFFFF;
+  --text:     #1A1A1C;
+  --muted:    #6B6860;
+  --faint:    #C4C2BC;
+  --accent:   #C8956C;
+  --accent2:  #A87452;
+  --navy:     #1B2A4A;
+  --rule:     #E2DFD8;
+  --green:    #3E6B4F;
+  --amber:    #9A6B1F;
+  --red:      #8C3B2E;
+  --serif:    'DM Serif Display', Georgia, serif;
+  --sans:     'Inter', system-ui, sans-serif;
+  --mono:     'IBM Plex Mono', ui-monospace, monospace;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+  font-size: 15px;
+  line-height: 1.6;
+  font-weight: 300;
+  padding: 0 clamp(16px, 4vw, 44px);
+}
+
+main { max-width: 1020px; margin: 0 auto; padding: 56px 0 72px; }
+
+/* ── header ── */
+.eyebrow {
+  font-size: 11px; letter-spacing: .14em; text-transform: uppercase;
+  color: var(--accent); margin-bottom: 16px;
+  display: flex; align-items: center; gap: 10px;
+}
+.eyebrow::before { content: ''; width: 22px; height: 1px; background: var(--accent); }
+
+h1 {
+  font-family: var(--serif); font-weight: 400; color: var(--navy);
+  font-size: clamp(28px, 5vw, 42px); line-height: 1.12; margin-bottom: 14px;
+}
+
+.sub { color: var(--muted); max-width: 660px; margin-bottom: 8px; font-size: 14.5px; }
+.stamp { font-size: 12px; color: var(--faint); margin-bottom: 34px; font-family: var(--mono); }
+
+/* ── live indicator ── */
+.live-row {
+  display: flex; align-items: center; gap: 10px;
+  margin-bottom: 6px;
+}
+.live-dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--green); animation: pulse 2.4s ease-in-out infinite;
+}
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.25} }
+@media (prefers-reduced-motion: reduce) {
+  .live-dot { animation: none; }
+}
+.live-label { font-size: 11px; letter-spacing: .1em; text-transform: uppercase;
+  color: var(--green); font-weight: 500; }
+
+/* ── summary cards ── */
+.summary {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  gap: 12px; margin-bottom: 36px;
+}
+.sumcard {
+  background: var(--bg2); border: 1px solid var(--rule);
+  border-top: 3px solid var(--accent); border-radius: 3px; padding: 16px 18px;
+}
+.sumval { font-family: var(--serif); font-size: 28px; color: var(--navy); line-height: 1; }
+.sumlab { font-size: 11.5px; color: var(--muted); margin-top: 6px; line-height: 1.45; }
+
+/* ── filter bar ── */
+.filter-bar {
+  display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; align-items: center;
+}
+.filter-btn {
+  font-family: var(--sans); font-size: 11.5px; font-weight: 500;
+  letter-spacing: .06em; text-transform: uppercase;
+  border: 1px solid var(--rule); background: var(--bg2);
+  color: var(--muted); padding: 6px 14px; border-radius: 20px;
+  cursor: pointer; transition: all .15s;
+}
+.filter-btn:hover { border-color: var(--accent); color: var(--accent); }
+.filter-btn.active {
+  background: var(--navy); border-color: var(--navy);
+  color: #fff;
+}
+.filter-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.filter-count {
+  font-size: 11px; color: var(--faint); margin-left: auto;
+  font-family: var(--mono);
+}
+
+/* ── table ── */
+.table-wrap { overflow-x: auto; }
+
+table {
+  width: 100%; border-collapse: collapse; background: var(--bg2);
+  border: 1px solid var(--rule); border-radius: 3px; min-width: 680px;
+}
+th {
+  text-align: left; font-size: 10.5px; letter-spacing: .09em;
+  text-transform: uppercase; color: var(--muted); font-weight: 500;
+  padding: 11px 12px; border-bottom: 1px solid var(--rule);
+  background: var(--bg); white-space: nowrap;
+}
+td {
+  padding: 11px 12px; border-bottom: 1px solid var(--rule);
+  vertical-align: middle; font-size: 13.5px;
+}
+tr:last-child td { border-bottom: none; }
+tr.hidden { display: none; }
+
+.st-name { color: var(--navy); font-weight: 400; }
+.st-id { font-size: 10.5px; color: var(--faint); font-family: var(--mono); }
+
+.dqs-val { font-family: var(--serif); font-size: 20px; color: var(--navy); }
+.dqs-absent { font-family: var(--mono); font-size: 12px; color: var(--red); }
+
+.tier {
+  font-size: 10.5px; letter-spacing: .05em; padding: 3px 9px;
+  border-radius: 20px; border: 1px solid; white-space: nowrap;
+}
+.tier.high   { color: var(--green); border-color: var(--green); }
+.tier.mid    { color: var(--amber); border-color: var(--amber); }
+.tier.low    { color: var(--red);   border-color: var(--red);   }
+.tier.absent { color: var(--red);   border-color: var(--red); background: #f9efee; }
+
+.num { font-family: var(--mono); font-size: 12px; color: var(--muted); }
+
+/* ── absent row highlight ── */
+tr.absent-row td { background: #fdf6f5; }
+
+/* ── loading / error states ── */
+.state-msg {
+  text-align: center; padding: 60px 20px;
+  font-family: var(--mono); font-size: 13px; color: var(--muted);
+}
+.state-msg .icon { font-size: 28px; display: block; margin-bottom: 12px; }
+
+/* ── method note ── */
+.method {
+  margin-top: 36px; font-size: 13.5px; color: var(--muted);
+  max-width: 760px; line-height: 1.8;
+}
+.method h2 {
+  font-size: 11px; letter-spacing: .14em; text-transform: uppercase;
+  color: var(--accent2); font-weight: 500; margin-bottom: 12px;
+}
+.method code {
+  background: var(--bg2); border: 1px solid var(--rule);
+  padding: 1px 5px; border-radius: 3px; font-size: 12px;
+  font-family: var(--mono);
+}
+.method a { color: var(--accent2); }
+
+/* ── footer ── */
+footer {
+  margin-top: 48px; padding-top: 20px; border-top: 1px solid var(--rule);
+  font-size: 12px; color: var(--faint);
+  display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px;
+}
+footer a { color: inherit; text-underline-offset: 3px; }
+
+/* ── responsive ── */
+@media (max-width: 700px) {
+  .summary { grid-template-columns: 1fr 1fr; }
+  .filter-bar { gap: 6px; }
+}
+</style>
+</head>
+<body>
+<main>
+
+  <p class="eyebrow">Living data-quality feed · Namibia</p>
+  <h1>Namibia Station Monitor</h1>
+  <p class="sub">Every month, this page re-pulls every Namibian station record
+  in NOAA's global daily archive and recomputes its
+  <strong>Data Quality Score (DQS v1.0)</strong> — a measure of how much
+  extreme-value and climate-risk analysis each record can honestly support.</p>
+
+  <div class="live-row">
+    <span class="live-dot" id="liveDot"></span>
+    <span class="live-label" id="liveLabel">Loading…</span>
+  </div>
+  <p class="stamp" id="stamp">Fetching latest data…</p>
+
+  <!-- Summary cards (populated by JS) -->
+  <div class="summary" id="summary">
+    <div class="sumcard"><div class="sumval" id="s-total">—</div>
+      <div class="sumlab">Stations tracked</div></div>
+    <div class="sumcard"><div class="sumval" id="s-usable">—</div>
+      <div class="sumlab">DQS ≥ 0.70 — usable for EVT analysis</div></div>
+    <div class="sumcard"><div class="sumval" id="s-absent">—</div>
+      <div class="sumlab">Confirmed absent from GHCND</div></div>
+    <div class="sumcard"><div class="sumval" id="s-mean">—</div>
+      <div class="sumlab">Mean DQS across all tracked stations</div></div>
+  </div>
+
+  <!-- Filter buttons -->
+  <div class="filter-bar" id="filterBar">
+    <button class="filter-btn active" data-filter="all"    type="button">All stations</button>
+    <button class="filter-btn"        data-filter="usable" type="button">Usable only (≥ 0.70)</button>
+    <button class="filter-btn"        data-filter="absent" type="button">GHCND absent</button>
+    <span class="filter-count" id="filterCount"></span>
+  </div>
+
+  <!-- Station table -->
+  <div class="table-wrap">
+    <table id="stationTable">
+      <thead>
+        <tr>
+          <th>Station</th>
+          <th>DQS</th>
+          <th>Analysis regime</th>
+          <th>Record span</th>
+          <th>GHCND status</th>
+        </tr>
+      </thead>
+      <tbody id="tableBody">
+        <tr><td colspan="5" class="state-msg">
+          <span class="icon">⟳</span>Loading station data…
+        </td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="method">
+    <h2>Method</h2>
+    <p>
+      <code>DQS = 0.4·L + 0.4·C + 0.2·G</code> — record length relative to
+      a 56-year reference horizon (L), completeness proxy from ISD metadata (C),
+      and coverage of the 1981–2010 climatological normal period (G).
+      Stations at DQS ≥ 0.70 support classical extreme-value estimation.
+      Below that, honest analysis requires prior-informed Bayesian methods
+      with wider credible intervals. Stations confirmed absent from
+      <a href="https://www.ncei.noaa.gov/products/land-based-station/global-historical-climatology-network-daily"
+         rel="noopener">NOAA GHCND</a>
+      receive DQS 0.0 regardless of ISD registration status.
+    </p>
+    <p style="margin-top:12px">
+      Note: monitor DQS uses ISD metadata as a completeness proxy.
+      For verified scores from actual daily observation counts see the
+      <a href="https://github.com/wilkaigulu/namibia-station-monitor/blob/main/audit/data/station_audit_results_2026-06.csv"
+         rel="noopener">June 2026 audit CSV</a>.
+      Full methodology and station audit:
+      <a href="https://doi.org/10.5281/zenodo.21229782" rel="noopener">Igulu (2026)</a> ·
+      Background reading:
+      <a href="https://wilkaigulu.com" rel="noopener">wilkaigulu.com</a>.
+    </p>
+  </div>
+
+  <footer>
+    <span>Wilka Igulu · Windhoek, Namibia ·
+      <a href="https://wilkaigulu.com">wilkaigulu.com</a></span>
+    <span>DQS v1.0 · data © NOAA NCEI ·
+      <a href="https://doi.org/10.5281/zenodo.21229782">DOI 10.5281/zenodo.21229782</a></span>
+  </footer>
+
+</main>
+
+<script>
+"use strict";
+
+/* ============================================================
+   DATA SOURCE
+   The workflow commits dqs_latest.csv to monitor/data/ each month.
+   We fetch it relative to this page's location.
+   ============================================================ */
+const CSV_URL = "../monitor/data/dqs_latest.csv";
+
+/* ── tiny CSV parser ── */
+function parseCSV(text) {
+  const lines = text.trim().split("\n");
+  const headers = lines[0].split(",").map(h => h.trim());
+  return lines.slice(1).map(line => {
+    const vals = line.split(",").map(v => v.trim());
+    const obj = {};
+    headers.forEach((h, i) => obj[h] = vals[i] ?? "");
+    return obj;
+  });
+}
+
+/* ── DQS tier ── */
+function tier(row) {
+  const status = (row.ghcnd_status || "").toLowerCase();
+  if (status.startsWith("absent")) return { cls: "absent", label: "GHCND absent" };
+  const d = parseFloat(row.dqs) || 0;
+  if (d >= 0.70) return { cls: "high",  label: "Usable — EVT analysis" };
+  if (d >= 0.50) return { cls: "mid",   label: "Prior-informed Bayesian" };
+  return             { cls: "low",   label: "Indicative only" };
+}
+
+/* ── render table ── */
+function renderTable(rows, filter) {
+  const tbody = document.getElementById("tableBody");
+  const countEl = document.getElementById("filterCount");
+  tbody.innerHTML = "";
+
+  let visible = 0;
+
+  rows.forEach(row => {
+    const t = tier(row);
+    const isAbsent = t.cls === "absent";
+    const dqs = parseFloat(row.dqs) || 0;
+
+    let show = true;
+    if (filter === "usable") show = dqs >= 0.70;
+    if (filter === "absent") show = isAbsent;
+
+    const tr = document.createElement("tr");
+    if (isAbsent) tr.classList.add("absent-row");
+    if (!show)    tr.classList.add("hidden");
+    else          visible++;
+
+    const dqsCell = isAbsent
+      ? `<span class="dqs-absent">0.0000 — absent</span>`
+      : `<span class="dqs-val">${dqs.toFixed(4)}</span>`;
+
+    const span = row.record_years && parseInt(row.record_years) > 0
+      ? `${row.record_years} yrs`
+      : "—";
+
+    const status = (row.ghcnd_status || "unknown")
+      .replace("ABSENT — ISD registered, GHCND 404",
+               "ISD registered · GHCND 404");
+
+    tr.innerHTML = `
+      <td>
+        <span class="st-name">${esc(row.station_name || "—")}</span><br>
+        <span class="st-id">${esc(row.usaf || "")}</span>
+      </td>
+      <td>${dqsCell}</td>
+      <td><span class="tier ${t.cls}">${t.label}</span></td>
+      <td class="num">${span}</td>
+      <td class="num" style="font-size:11.5px">${esc(status)}</td>`;
+
+    tbody.appendChild(tr);
+  });
+
+  countEl.textContent = `${visible} station${visible !== 1 ? "s" : ""} shown`;
+}
+
+/* ── populate summary cards ── */
+function renderSummary(rows) {
+  const total   = rows.length;
+  const usable  = rows.filter(r => parseFloat(r.dqs) >= 0.70).length;
+  const absent  = rows.filter(r =>
+    (r.ghcnd_status || "").toLowerCase().startsWith("absent")).length;
+  const nonAbsent = rows.filter(r =>
+    !(r.ghcnd_status || "").toLowerCase().startsWith("absent"));
+  const mean = nonAbsent.length
+    ? (nonAbsent.reduce((s, r) => s + (parseFloat(r.dqs) || 0), 0) / nonAbsent.length)
+    : 0;
+
+  document.getElementById("s-total").textContent  = total;
+  document.getElementById("s-usable").textContent = usable;
+  document.getElementById("s-absent").textContent = absent;
+  document.getElementById("s-mean").textContent   = mean.toFixed(2);
+}
+
+/* ── filter buttons ── */
+let currentFilter = "all";
+let allRows = [];
+
+document.getElementById("filterBar").addEventListener("click", e => {
+  const btn = e.target.closest(".filter-btn");
+  if (!btn) return;
+  document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
+  btn.classList.add("active");
+  currentFilter = btn.dataset.filter;
+  renderTable(allRows, currentFilter);
+});
+
+/* ── escape HTML ── */
+function esc(s) {
+  return String(s).replace(/[&<>"']/g,
+    c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+}
+
+/* ── main fetch ── */
+async function load() {
+  const dot   = document.getElementById("liveDot");
+  const label = document.getElementById("liveLabel");
+  const stamp = document.getElementById("stamp");
+
+  try {
+    const res = await fetch(CSV_URL);
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const text = await res.text();
+    allRows = parseCSV(text);
+
+    if (allRows.length === 0) throw new Error("Empty dataset");
+
+    const runDate = allRows[0].run_date || "unknown";
+
+    dot.style.background   = "var(--green)";
+    label.textContent      = "Live · updated monthly";
+    label.style.color      = "var(--green)";
+    stamp.textContent      = `Last run: ${runDate} · recomputes on the 1st of each month · DQS v1.0`;
+
+    renderSummary(allRows);
+    renderTable(allRows, currentFilter);
+
+  } catch (err) {
+    dot.style.background   = "var(--amber)";
+    label.textContent      = "Could not load live data";
+    label.style.color      = "var(--amber)";
+    stamp.textContent      = `Error: ${err.message}`;
+
+    document.getElementById("tableBody").innerHTML = `
+      <tr><td colspan="5" class="state-msg">
+        <span class="icon">⚠</span>
+        Could not fetch station data (${esc(err.message)}).<br>
+        <a href="../monitor/data/dqs_latest.csv">View raw CSV directly</a>
+      </td></tr>`;
+  }
+}
+
+load();
+</script>
+</body>
+</html>
