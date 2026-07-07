@@ -300,11 +300,12 @@ function parseCSV(text) {
 
 /* ── DQS tier ── */
 function tier(row) {
-  const status = (row.ghcnd_status || "").toLowerCase();
-  if (status.startsWith("absent")) return { cls: "absent", label: "GHCND absent" };
-  const d = parseFloat(row.dqs) || 0;
-  if (d >= 0.70) return { cls: "high",  label: "Usable — EVT analysis" };
-  if (d >= 0.50) return { cls: "mid",   label: "Prior-informed Bayesian" };
+  const status = (row.ghcnd_status || "").toLowerCase().trim();
+  const dqs = parseFloat(row.dqs) || 0;
+  if (dqs === 0 && status.includes("absent")) return { cls: "absent", label: "GHCND absent" };
+  if (dqs === 0) return { cls: "absent", label: "GHCND absent" };
+  if (dqs >= 0.70) return { cls: "high",  label: "Usable — EVT analysis" };
+  if (dqs >= 0.50) return { cls: "mid",   label: "Prior-informed Bayesian" };
   return             { cls: "low",   label: "Indicative only" };
 }
 
@@ -363,7 +364,8 @@ function renderSummary(rows) {
   const total   = rows.length;
   const usable  = rows.filter(r => parseFloat(r.dqs) >= 0.70).length;
   const absent  = rows.filter(r =>
-    (r.ghcnd_status || "").toLowerCase().startsWith("absent")).length;
+    (parseFloat(r.dqs) || 0) === 0 &&
+    (r.ghcnd_status || "").toLowerCase().includes("absent")).length;
   const nonAbsent = rows.filter(r =>
     !(r.ghcnd_status || "").toLowerCase().startsWith("absent"));
   const mean = nonAbsent.length
