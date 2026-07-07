@@ -61,12 +61,13 @@ region. Its GHCND record covers 35.0% of expected observation days.
 The national port and primary industrial corridor has precipitation
 records for 6.6% of days since 1990.
 
-**4. Lüderitz is absent from GHCND entirely.**
-Lüderitz is listed as an active station in WMO OSCAR/Surface. It does
-not appear in GHCND. Not sparse. Not gappy. Absent. Any hazard estimate
-a global model produces for the southern Namibian coast is derived from
-stations hundreds of kilometres away and from model physics and the
-deliverable will not say so.
+**4. Lüderitz appears in the NOAA ISD station history.**
+Lüderitz appears in the NOAA ISD station history under two entries:
+USAF 683000 (Luderitz/Diaz Point, records beginning 1949-01-03) and
+USAF 683005 (Luderitz, records beginning 2000-04-12). Both entries
+carry country code WA. When the corresponding GHCND station files are
+requested directly, both return HTTP 404. The station is registered
+in the global metadata. Its daily observations are not in the archive.
 
 ---
 
