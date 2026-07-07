@@ -45,7 +45,7 @@ def compute_dqs(row):
             "normal_coverage": 0.0,
             "record_years"   : 0,
             "usable"         : False,
-            "ghcnd_status"   : "ABSENT — ISD registered, GHCND 404",
+            "ghcnd_status"   : "ABSENT - ISD registered, GHCND 404",
         }
 
     # Parse begin and end dates
@@ -74,7 +74,7 @@ def compute_dqs(row):
     # C — completeness proxy
     # ISD metadata does not give us day-level completeness directly.
     # We use span completeness: (end - begin).days / expected_days
-    # This is a conservative proxy — true completeness from the audit
+    # This is a conservative proxy true completeness from the audit
     # notebook is more precise but requires the full data pull.
     span_days     = (end - begin).days + 1
     expected_days = record_years * 365.25
