@@ -152,7 +152,7 @@ re-running any retrieval.
 **For the audit and dataset:**
 
 > Igulu, W. (2026). *Namibia Station Monitor: GHCND audit and Data Quality
-> Scoring for Namibian climate stations* (v1.0-audit-2026-06) [Data and code].
+> Scoring for Namibian climate stations* (audit-2026-06) [Data and code].
 > Zenodo. https://doi.org/10.5281/zenodo.21229782
 
 **BibTeX:**
@@ -162,7 +162,7 @@ re-running any retrieval.
   title     = {Namibia Station Monitor: {GHCND} audit and Data Quality
                Scoring for Namibian climate stations},
   year      = {2026},
-  version   = {v1.0-audit-2026-06},
+  version   = {audit-2026-06},
   publisher = {Zenodo},
   doi       = {10.5281/zenodo.21229782},
   url       = {https://doi.org/10.5281/zenodo.21229782}
