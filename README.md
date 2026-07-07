@@ -1,6 +1,6 @@
 # Namibia Station Monitor
 
-**What the global climate archive actually contains for Namibia — and what it is missing.**
+**What the global climate archive actually contains for Namibia and what it is missing.**
 
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.21229782.svg)](https://doi.org/10.5281/zenodo.21229782)
 [![License: Apache 2.0](https://img.shields.io/badge/Code-Apache%202.0-blue.svg)](LICENSE-CODE)
