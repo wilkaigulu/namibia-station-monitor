@@ -1,4 +1,4 @@
-# Namibian Station Audit — NOAA GHCND Data Quality Assessment
+# Namibian Station Audit - NOAA GHCND Data Quality Assessment
 
 **Author:** Wilka Igulu  
 **Date:** 29 June 2026  
@@ -74,7 +74,7 @@ posterior; a station at DQS 0.35 leans heavily on regional priors.
 
 ## 4. Station-level findings
 
-### 4.1 Windhoek GSN — DQS 0.9870 — USABLE
+### 4.1 Windhoek GSN - DQS 0.9870 - USABLE
 **GHCND ID:** WA007401540  
 **Records:** 19,793 daily observations  
 **Completeness:** 98.5%  
@@ -86,7 +86,7 @@ SACRF framework. The high DQS reflects both length and completeness.
 
 ---
 
-### 4.2 Rundu — DQS 0.9338 — USABLE
+### 4.2 Rundu - DQS 0.9338 - USABLE
 **GHCND ID:** WA012084750  
 **Records:** 17,121 daily observations  
 **Completeness:** 85.2%  
@@ -99,7 +99,7 @@ of the country.
 
 ---
 
-### 4.3 Gobabis — DQS 0.8099 — USABLE
+### 4.3 Gobabis - DQS 0.8099 - USABLE
 **GHCND ID:** WA007878380  
 **Records:** 12,242 daily observations  
 **Completeness:** 60.9%  
@@ -111,7 +111,7 @@ intervals from this station will be wider than Windhoek or Rundu.
 
 ---
 
-### 4.4 Ondangwa — DQS 0.5849 — NOT USABLE
+### 4.4 Ondangwa - DQS 0.5849 - NOT USABLE
 **GHCND ID:** WAM00068006  
 **Records:** 6,642 daily observations  
 **Completeness:** 35.0%  
@@ -126,7 +126,7 @@ gap is working from a materially incomplete evidential base.
 
 ---
 
-### 4.5 Walvis Bay — DQS 0.5566 — NOT USABLE
+### 4.5 Walvis Bay - DQS 0.5566 - NOT USABLE
 **GHCND ID:** WAM00068098  
 **Records:** 7,429 daily observations  
 **Completeness:** 58.3% overall  
@@ -141,7 +141,7 @@ in the global archive is effectively absent for the past 35 years.
 
 ---
 
-### 4.6 Mariental — DQS 0.5484 — NOT USABLE
+### 4.6 Mariental - DQS 0.5484 - NOT USABLE
 **GHCND ID:** WA005688170  
 **Records:** 5,769 daily observations  
 **Completeness:** 96.7%  
@@ -153,7 +153,7 @@ below the usability threshold.
 
 ---
 
-### 4.7 Windhoek alt A, B, C — DQS 0.53–0.55 — NOT USABLE
+### 4.7 Windhoek alt A, B, C - DQS 0.53–0.55 - NOT USABLE
 **GHCND IDs:** WA007400630, WA007401240, WA007401850  
 
 Three secondary Windhoek stations with short records beginning around 1980.
@@ -163,7 +163,7 @@ are not independently usable for extreme-value analysis.
 
 ---
 
-### 4.8 Keetmanshoop — DQS 0.5263 — NOT USABLE
+### 4.8 Keetmanshoop - DQS 0.5263 - NOT USABLE
 **GHCND ID:** WA004192150  
 **Records:** 5,236 daily observations  
 **Completeness:** 93.0%  
@@ -173,22 +173,21 @@ Similar profile to Mariental good completeness, short record. The
 
 ---
 
-### 4.9 Lüderitz — DQS 0.0000 — ABSENT FROM GHCND
+### 4.9 Lüderitz - DQS 0.0000 - ABSENT FROM GHCND
 **GHCND ID:** NOT IN GHCND  
 
-Lüderitz does not appear in the GHCND archive. It is listed as an active
-station in WMO OSCAR/Surface. Its ISD identifier (68096099999) is present
-in the NOAA ISD master list but yields no records in GHCND.
+Lüderitz appears in the NOAA ISD station history under two entries:
+USAF 683000 (Luderitz/Diaz Point, records beginning 1949-01-03) and
+USAF 683005 (Luderitz, records beginning 2000-04-12). Both entries
+carry country code WA. When the corresponding GHCND station files are
+requested directly, both return HTTP 404. The station is registered
+in the global metadata. Its daily observations are not in the archive.
 
-This is an archiving gap, not an operational gap. The station exists. The
-data is not in the global archive.
-
-Lüderitz has over a century of settlement history. It is the site of the
-Kudu Gas Field development, a functioning commercial harbour, and the
-proposed terminus of the Tsau ǁKhaeb green hydrogen corridor. Any global
-climate risk model that produces a hazard estimate for the southern Namibian
-coast is doing so without a single observation from this location. The
-model will not disclose this.
+This distinction matters. The finding is not that Lüderitz was never
+known to the global network, it was. The finding is that its
+observation record was never ingested into GHCND, the archive that
+global risk models and reanalysis products draw on for daily climate
+data.
 
 **This finding is the headline result of this audit.**
 
@@ -248,7 +247,7 @@ Data-Sparse African Infrastructure Markets* (SACRF Working Paper v0.2).
 wilkaigulu.com.
 
 Igulu, W. (2026). *Namibia Station Monitor: GHCND audit and Data Quality
-Scoring for Namibian climate stations* (v1.0-audit-2026-06). Zenodo.
+Scoring for Namibian climate stations* (audit-2026-06). Zenodo.
 https://doi.org/10.5281/zenodo.21229782
 
 Menne, M.J., I. Durre, R.S. Vose, B.E. Gleason, and T.G. Houston (2012).
