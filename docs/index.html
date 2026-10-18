@@ -13,21 +13,30 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  --bg:       #F7F5F0;
-  --bg2:      #FFFFFF;
-  --text:     #1A1A1C;
-  --muted:    #6B6860;
-  --faint:    #C4C2BC;
-  --accent:   #C8956C;
-  --accent2:  #A87452;
-  --navy:     #1B2A4A;
-  --rule:     #E2DFD8;
-  --green:    #3E6B4F;
-  --amber:    #9A6B1F;
-  --red:      #8C3B2E;
-  --serif:    'DM Serif Display', Georgia, serif;
-  --sans:     'Inter', system-ui, sans-serif;
-  --mono:     'IBM Plex Mono', ui-monospace, monospace;
+  /* Backgrounds - warm, paper-like neutrals */
+  --bg:      #FAF3EE;
+  --bg2:     #FBFAF7;
+  --bg3:     #EAECE9;
+
+  /* Typography - deep ink and quiet secondary text */
+  --text:    #20292E;
+  --muted:   #606B70;
+  --faint:   #B7C0C1;
+
+  /* Accents - mineral blue with retrained copper */
+  --accent:  #6D8796;
+  --accent2: #4D6979;
+  --copper:  #B47A5C;
+
+  /* Structural elements */
+  --navy:    #263A44;
+  --rule:    #D9DEDC;
+
+  /* Typography and layout - keep these unchanged */
+  --serif:   'DM Serif Display', Georgia, serif;
+  --sans:    'Inter', system-ui, sans-serif;
+  --max:     700px;
+  --pad:     clamp(20px, 5vw, 44px);
 }
 
 body {
